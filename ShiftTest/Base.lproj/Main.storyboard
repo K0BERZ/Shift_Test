@@ -139,6 +139,7 @@
                         <outlet property="dateOfBirthPicker" destination="QCb-9v-nkH" id="jDa-GO-3Rl"/>
                         <outlet property="nameTextField" destination="RYE-df-zc0" id="haV-ru-8GV"/>
                         <outlet property="passwordTextField" destination="bGK-u3-5Ly" id="ysH-jt-vim"/>
+                        <outlet property="registerButton" destination="eWJ-BN-3sn" id="keU-Zl-qhb"/>
                         <outlet property="scrollView" destination="vt4-mW-NEl" id="HC6-v6-cy5"/>
                         <outlet property="surnameTextField" destination="1Fr-9H-VH6" id="G4b-ab-hul"/>
                         <segue destination="am3-dd-nw8" kind="show" identifier="goToContests" id="oRw-QW-e7r"/>

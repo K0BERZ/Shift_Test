@@ -17,12 +17,15 @@ class RegistrationViewController: UIViewController, UIScrollViewDelegate {
     @IBOutlet private weak var dateOfBirthPicker: UIDatePicker!
     @IBOutlet private weak var passwordTextField: UITextField!
     @IBOutlet private weak var confirmPasswordTextField: UITextField!
-    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet private weak var scrollView: UIScrollView!
+    @IBOutlet private weak var registerButton: UIButton!
     
     private var presenter: RegistrationPresenterProtocol!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        registerButton.isEnabled = false
         
         // set content size of the scroll view to be equal to the size of the view
         scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height)
@@ -52,7 +55,17 @@ class RegistrationViewController: UIViewController, UIScrollViewDelegate {
         performSegue(withIdentifier: "goToContests", sender: nil)
         
     }
-    
+   
+    func areAllFieldsFilled() -> Bool {
+        guard let name = nameTextField.text, !name.isEmpty,
+              let surname = surnameTextField.text, !surname.isEmpty,
+              let password = passwordTextField.text, !password.isEmpty,
+              let confirmPassword = confirmPasswordTextField.text, !confirmPassword.isEmpty else {
+            return false
+        }
+        return true
+    }
+
     @objc private func keyboardWillShow(_ notification: Notification) {
         guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
 
@@ -67,6 +80,7 @@ class RegistrationViewController: UIViewController, UIScrollViewDelegate {
     }
     
     @objc private func dismissKeyboard() {
+        registerButton.isEnabled = areAllFieldsFilled()
         view.endEditing(true)
     }
     
