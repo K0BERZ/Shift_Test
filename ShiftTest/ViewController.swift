@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SafariServices
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
@@ -51,6 +52,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return cell
     }
     
+    // MARK: - Table view delegate
+        
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let competition = competitions[indexPath.row]
+        
+        if let url = URL(string: competition.url) {
+            let safariViewController = SFSafariViewController(url: url)
+            present(safariViewController, animated: true, completion: nil)
+        }
+    }
     
     private func fetchCompetitions() {
         let url = URL(string: "https://kontests.net/api/v1/all")!

@@ -15,7 +15,8 @@ class CompetitionCell: UITableViewCell {
 }
 
 struct Competition: Codable {
-    var name: String
-    var start_time: String
-    var end_time: String
+    let name: String
+    let start_time: String
+    let end_time: String
+    let url: String
 }
