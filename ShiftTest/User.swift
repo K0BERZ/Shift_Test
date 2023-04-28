@@ -12,5 +12,5 @@ class Note: NSManagedObject {
     @NSManaged var name: String!
     @NSManaged var surname: String!
     @NSManaged var password: String!
-    @NSManaged var dateOfBirth: Date!
+    @NSManaged var dateOfBirth: String!
 }

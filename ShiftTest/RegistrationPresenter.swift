@@ -44,13 +44,19 @@ class RegistrationPresenter: RegistrationPresenterProtocol {
             return
         }
         
+        let formatter = DateFormatter()
+        formatter.dateStyle = DateFormatter.Style.medium
+        formatter.locale = Locale(identifier: "ru_RU")
+        
+        let bornDate = formatter.string(from: NSDate() as Date)
+        
         // Save username to CoreData
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         let user = User(context: context)
         currentUser = name
         user.name = name
         user.surname = surname
-        user.dateOfBirth = dateOfBirth
+        user.dateOfBirth = bornDate
         user.password = password
         try? context.save()
     }

@@ -11,18 +11,32 @@ protocol RegistrationViewProtocol: AnyObject {
     func showValidationError(_ message: String)
 }
 
-class RegistrationViewController: UIViewController {
+class RegistrationViewController: UIViewController, UIScrollViewDelegate {
     @IBOutlet private weak var nameTextField: UITextField!
     @IBOutlet private weak var surnameTextField: UITextField!
     @IBOutlet private weak var dateOfBirthPicker: UIDatePicker!
     @IBOutlet private weak var passwordTextField: UITextField!
     @IBOutlet private weak var confirmPasswordTextField: UITextField!
+    @IBOutlet weak var scrollView: UIScrollView!
     
     private var presenter: RegistrationPresenterProtocol!
     
     override func viewDidLoad() {
-            super.viewDidLoad()
-            presenter = RegistrationPresenter(view: self)
+        super.viewDidLoad()
+        
+        // set content size of the scroll view to be equal to the size of the view
+        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height)
+        
+        // Register for keyboard notifications
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
+        // Add tap gesture recognizer to dismiss keyboard
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        scrollView.addGestureRecognizer(tapGesture)
+        
+        presenter = RegistrationPresenter(view: self)
         }
     
     
@@ -37,6 +51,27 @@ class RegistrationViewController: UIViewController {
         
         performSegue(withIdentifier: "goToContests", sender: nil)
         
+    }
+    
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+
+        // set content inset to height of keyboard
+        let bottomInset = keyboardFrame.height
+        scrollView.contentInset.bottom = bottomInset
+        scrollView.verticalScrollIndicatorInsets.bottom = bottomInset
+    }
+    
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        self.scrollView.contentSize = CGSize(width: self.view.frame.width, height: self.scrollView.frame.height - 300)
+    }
+    
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 }
 
